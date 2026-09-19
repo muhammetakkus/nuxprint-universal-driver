@@ -16,12 +16,12 @@
 //   NuxPrintDeviceInspector.exe --json     machine-readable output
 
 #include <windows.h>
+#include <winioctl.h>   // CTL_CODE
 #include <setupapi.h>
 #include <winspool.h>
-#include <devguid.h>
-#include <usbioctl.h>
 
 #include <cstdio>
+#include <cwchar>       // wcslen, wcscmp
 #include <string>
 #include <vector>
 

@@ -3,13 +3,24 @@
 Sıra bilinçli: **önce ESC/POS akışını driver olmadan doğrula.** Böylece bir
 hata çıktığında "ESC/POS mu yanlış, driver mı" sorusu hiç sorulmaz.
 
+## Adım 0 — Derle
+
+**"Developer Command Prompt for VS 2022"** içinde (normal cmd/PowerShell değil —
+`cl.exe` yalnızca orada PATH'te olur), depo kökünde:
+
+```bat
+build-tools.bat
+```
+
+Çıktı: `build\NuxPrintDeviceInspector.exe` ve `build\NuxPrintPrinterTest.exe`.
+Bu adımda WDK gerekmez, Windows SDK yeterlidir.
+
 ## Adım 1 — Cihaz kimliği
 
 ```bat
-cd tools\device-inspector
-build.bat
-NuxPrintDeviceInspector.exe
-NuxPrintDeviceInspector.exe --json > ..\..\tests\hardware\<marka>-<model>.json
+mkdir tests\hardware 2>nul
+build\NuxPrintDeviceInspector.exe
+build\NuxPrintDeviceInspector.exe --json > tests\hardware\<marka>-<model>.json
 ```
 
 Bana gönder: tam çıktı. Özellikle `IEEE-1284 ID`, `VID/PID`, `Port`,
@@ -19,23 +30,20 @@ MVP kapsamı dışındadır (bunu da bilmemiz gerekiyor).
 ## Adım 2 — Driver'sız raster baskı
 
 ```bat
-cd tools\printer-test
-build.bat
-
 REM Once kagida hicbir sey gitmeden akisi dosyaya al (guvenli):
-NuxPrintPrinterTest.exe --width 576 --dry test.bin
+build\NuxPrintPrinterTest.exe --width 576 --dry test.bin
 
 REM 80mm cihaz, dogrudan cihaz yoluna (Inspector'in yazdigi path):
-NuxPrintPrinterTest.exe --device "\\?\usb#vid_xxxx&pid_xxxx#..." --width 576
+build\NuxPrintPrinterTest.exe --device "\\?\usb#vid_xxxx&pid_xxxx#..." --width 576
 
 REM 58mm cihaz:
-NuxPrintPrinterTest.exe --device "..." --width 384 --cut none
+build\NuxPrintPrinterTest.exe --device "..." --width 384 --cut none
 
 REM Mevcut bir kuyruk uzerinden (vendor driver kuruluysa):
-NuxPrintPrinterTest.exe --queue "80mm Series Printer" --width 576
+build\NuxPrintPrinterTest.exe --queue "80mm Series Printer" --width 576
 
 REM Uzun fis davranisi:
-NuxPrintPrinterTest.exe --device "..." --width 576 --long
+build\NuxPrintPrinterTest.exe --device "..." --width 576 --long
 ```
 
 ## Adım 2'de kâğıda bakarken not edilecekler

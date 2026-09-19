@@ -18,7 +18,9 @@
 #include <winspool.h>
 
 #include <cstdio>
+#include <cstdlib>      // _wtoi
 #include <string>
+#include <utility>      // std::move
 #include <vector>
 
 #include "core/escpos/escpos.h"
