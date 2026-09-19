@@ -1,0 +1,50 @@
+{
+  "$comment": [
+    "Printer profile database. Model-specific behaviour lives here, never in code.",
+    "A profile is chosen at queue-creation time by NuxPrintDeviceSetup and stored",
+    "in the queue's property bag; the renderer reads it from there at print time.",
+    "",
+    "Matching order: exact vid+pid > ieee1284Contains > manufacturerContains > fallback.",
+    "'verified' means the model passed docs/acceptance-tests on real hardware.",
+    "Nothing is added here from a datasheet - only from a test run."
+  ],
+  "schemaVersion": 1,
+  "fallbackProfileId": "generic-escpos-80-203",
+  "profiles": [
+    {
+      "id": "generic-escpos-80-203",
+      "name": "Generic ESC/POS 80mm 203 DPI",
+      "verified": false,
+      "match": { "vid": null, "pid": null, "ieee1284Contains": [], "manufacturerContains": [] },
+      "paper": { "widthMm": 80, "printableWidthDots": 576 },
+      "resolution": { "dpi": 203 },
+      "protocol": { "type": "escpos", "raster": "GS_V_0", "maxBandHeightDots": 128 },
+      "features": { "cut": true, "partialCut": true, "drawer": false, "status": false },
+      "output": { "feedDotsAfterPrint": 80, "cutMode": "partial", "defaultHalftone": "threshold", "threshold": 128 }
+    },
+    {
+      "id": "generic-escpos-58-203",
+      "name": "Generic ESC/POS 58mm 203 DPI",
+      "verified": false,
+      "match": { "vid": null, "pid": null, "ieee1284Contains": [], "manufacturerContains": [] },
+      "paper": { "widthMm": 58, "printableWidthDots": 384 },
+      "resolution": { "dpi": 203 },
+      "protocol": { "type": "escpos", "raster": "GS_V_0", "maxBandHeightDots": 128 },
+      "features": { "cut": false, "partialCut": false, "drawer": false, "status": false },
+      "output": { "feedDotsAfterPrint": 100, "cutMode": "none", "defaultHalftone": "threshold", "threshold": 128 }
+    },
+    {
+      "$comment": "Template for a hardware-verified entry. Copy, fill from Device Inspector output, set verified only after the acceptance test passes.",
+      "id": "example-model-template",
+      "name": "Vendor Model 80mm",
+      "verified": false,
+      "disabled": true,
+      "match": { "vid": "0000", "pid": "0000", "ieee1284Contains": ["MDL:"], "manufacturerContains": [] },
+      "paper": { "widthMm": 80, "printableWidthDots": 576 },
+      "resolution": { "dpi": 203 },
+      "protocol": { "type": "escpos", "raster": "GS_V_0", "maxBandHeightDots": 128 },
+      "features": { "cut": true, "partialCut": true, "drawer": true, "status": false },
+      "output": { "feedDotsAfterPrint": 80, "cutMode": "partial", "defaultHalftone": "threshold", "threshold": 128 }
+    }
+  ]
+}

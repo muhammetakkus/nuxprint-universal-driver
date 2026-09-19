@@ -1,0 +1,57 @@
+; NuxPrint Universal Thermal — printer driver INF (TASLAK, infverif ile dogrulanmadi)
+;
+; Tek generic driver, cok kuyruk: model farkliliklari INF'te degil profil
+; veritabaninda tutulur (bkz. core/profiles/NuxPrintProfiles.json).
+; Kurulumda kuyruk NuxPrintDeviceSetup tarafindan AddPrinter ile olusturulur;
+; bu INF yalnizca driver paketini Driver Store'a tanitir.
+
+[Version]
+Signature="$Windows NT$"
+Provider=%ProviderName%
+ClassGUID={4D36E979-E325-11CE-BFC1-08002BE10318}
+Class=Printer
+CatalogFile=NuxPrintThermal.cat
+DriverVer=01/01/2026,1.0.0.0
+PnpLockdown=1
+
+[Manufacturer]
+%ManufacturerName%=NuxPrint,NTamd64.6.1,NTamd64.10.0
+
+; Windows 7 x64
+[NuxPrint.NTamd64.6.1]
+%NuxPrintThermal.DeviceDesc%=NuxPrintThermal.Install
+
+; Windows 10 / 11 x64
+[NuxPrint.NTamd64.10.0]
+%NuxPrintThermal.DeviceDesc%=NuxPrintThermal.Install
+
+[NuxPrintThermal.Install]
+CopyFiles=NuxPrintThermal.Files
+DriverFile=UNIDRV.DLL
+ConfigFile=UNIDRVUI.DLL
+DataFile=NuxPrintThermal.gpd
+HelpFile=UNIDRV.HLP
+
+[NuxPrintThermal.Files]
+NuxPrintThermal.gpd
+NuxPrintThermalRender.dll
+NuxPrintThermalUI.dll
+NuxPrintProfiles.json
+
+[DestinationDirs]
+DefaultDestDir=66000
+
+[SourceDisksNames.amd64]
+1=%DiskName%,,,""
+
+[SourceDisksFiles.amd64]
+NuxPrintThermal.gpd=1
+NuxPrintThermalRender.dll=1
+NuxPrintThermalUI.dll=1
+NuxPrintProfiles.json=1
+
+[Strings]
+ProviderName="NuxPrint"
+ManufacturerName="NuxPrint"
+NuxPrintThermal.DeviceDesc="NuxPrint Universal Thermal"
+DiskName="NuxPrint Universal Thermal Driver Disk"

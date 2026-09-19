@@ -1,0 +1,127 @@
+*% NuxPrint Universal Thermal — Unidrv GPD (TASLAK, WDK ile dogrulanmadi)
+*%
+*% Bu dosya kagit/cozunurluk/secenek modelini tanimlar. ESC/POS byte akisini
+*% GPD degil, NuxPrintThermalRender.dll uretir (bkz. docs/architecture.md §1).
+*% Buradaki komut alanlari bilerek bostur: rendering plug-in devreye girdiginde
+*% cakisma olmasin diye.
+
+*GPDFileVersion: "1.0"
+*GPDSpecVersion: "1.0"
+*Include: "StdNames.gpd"
+*ModelName: "NuxPrint Universal Thermal"
+*MasterUnits: PAIR(203, 203)
+*ResourceDLL: "NuxPrintThermalUI.dll"
+
+*% --- Renk / raster ---
+*Feature: ColorMode
+{
+    *rcNameID: =COLOR_PRINTING_MODE_DISPLAY
+    *DefaultOption: Mono
+    *Option: Mono
+    {
+        *rcNameID: =MONO_DISPLAY
+        *DevNumOfPlanes: 1
+        *DevBPP: 1
+        *DrvBPP: 1
+    }
+}
+
+*% --- Cozunurluk. Ilk hedef 203 DPI; profil ileride 180/300'u de tasiyabilsin. ---
+*Feature: Resolution
+{
+    *rcNameID: =RESOLUTION_DISPLAY
+    *DefaultOption: 203dpi
+    *Option: 203dpi
+    {
+        *rcNameID: 256
+        *DPI: PAIR(203, 203)
+        *TextDPI: PAIR(203, 203)
+        *SpotDiameter: 100
+    }
+}
+
+*% --- Kagit. Rulo mantigi: sabit uzunluk yerine cok buyuk bir maksimum ve
+*%     custom size. Gercek fis uzunlugu, renderer'in sondaki bos satirlari
+*%     kirpmasiyla belirlenir (bkz. trimTrailingBlankRows). ---
+*Feature: PaperSize
+{
+    *rcNameID: =PAPER_SIZE_DISPLAY
+    *DefaultOption: ROLL80
+    *Option: ROLL80
+    {
+        *rcNameID: 257
+        *% 80mm = 640 master units; yazilabilir 576 dot (72mm)
+        *PageDimensions: PAIR(640, 16000)
+        *PrintableArea: PAIR(576, 16000)
+        *PrintableOrigin: PAIR(0, 0)
+        *CursorOrigin: PAIR(0, 0)
+    }
+    *Option: ROLL58
+    {
+        *rcNameID: 258
+        *% 58mm = 464 master units; yazilabilir 384 dot (48mm)
+        *PageDimensions: PAIR(464, 16000)
+        *PrintableArea: PAIR(384, 16000)
+        *PrintableOrigin: PAIR(0, 0)
+        *CursorOrigin: PAIR(0, 0)
+    }
+    *Option: CUSTOMSIZE
+    {
+        *rcNameID: =USER_DEFINED_SIZE_DISPLAY
+        *MinSize: PAIR(200, 200)
+        *MaxSize: PAIR(640, 100000)
+        *MaxPrintableWidth: 640
+        *MinLeftMargin: 0
+        *CenterPrintable?: FALSE
+        *CursorOrigin: PAIR(0, 0)
+        *PrintableOrigin: PAIR(0, 0)
+    }
+}
+
+*Feature: InputBin
+{
+    *rcNameID: =PAPER_SOURCE_DISPLAY
+    *DefaultOption: ROLL
+    *Option: ROLL { *rcNameID: 259 }
+}
+
+*Feature: Orientation
+{
+    *rcNameID: =ORIENTATION_DISPLAY
+    *DefaultOption: PORTRAIT
+    *Option: PORTRAIT { *rcNameID: =PORTRAIT_DISPLAY }
+}
+
+*% --- Yazdirma yogunlugu / kalite: renderer bunlari halftone esigine cevirir ---
+*Feature: PrintDensity
+{
+    *rcNameID: 260
+    *DefaultOption: NORMAL
+    *Option: LIGHT  { *rcNameID: 261 }
+    *Option: NORMAL { *rcNameID: 262 }
+    *Option: DARK   { *rcNameID: 263 }
+}
+
+*Feature: ImageMode
+{
+    *rcNameID: 264
+    *DefaultOption: THRESHOLD
+    *Option: THRESHOLD { *rcNameID: 265 }
+    *Option: DITHER    { *rcNameID: 266 }
+}
+
+*Feature: CutMode
+{
+    *rcNameID: 267
+    *DefaultOption: PARTIAL
+    *Option: NONE    { *rcNameID: 268 }
+    *Option: PARTIAL { *rcNameID: 269 }
+    *Option: FULL    { *rcNameID: 270 }
+}
+
+*% --- Cikti: RAW byte akisi; komut uretimi plug-in'de ---
+*OutputDataFormat: H_BYTE
+*OptimizeLeftBound?: FALSE
+*CursorXAfterSendBlockData: AT_GRXDATA_END
+*CursorYAfterSendBlockData: AUTO_INCREMENT
+*MemoryUsage: LIST(FONT, RASTER)
