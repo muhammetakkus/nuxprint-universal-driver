@@ -5,7 +5,7 @@ hata çıktığında "ESC/POS mu yanlış, driver mı" sorusu hiç sorulmaz.
 
 ## Adım 0 — Derle
 
-**"Developer Command Prompt for VS 2022"** içinde (normal cmd/PowerShell değil —
+**"x64 Native Tools Command Prompt for VS 2022"** içinde (normal cmd/PowerShell değil —
 `cl.exe` yalnızca orada PATH'te olur), depo kökünde:
 
 ```bat
